@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using SampleAPI.Models;
 using SampleAPI.Services;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using Microsoft.OpenApi.Models;
 
 namespace SampleAPI
 {
@@ -39,6 +40,12 @@ namespace SampleAPI
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.UseCamelCasing(true));
+
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +66,12 @@ namespace SampleAPI
             {
                 endpoints.MapControllers();
             });
+
+            app.UseSwagger()
+                .UseSwaggerUI(c =>
+                {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                });
         }
     }
 }
